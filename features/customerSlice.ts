@@ -1,0 +1,42 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { act } from "react-dom/test-utils";
+
+// typescript thing
+interface CustomerState {
+  value: Customer[],
+}
+
+interface addFoodToCustomerPayload {
+  id: string;
+  food: string
+}
+
+interface Customer {
+  id: string;
+  name: string;
+  food: string[]
+}
+
+const initialState: CustomerState = {
+  value:[],
+}
+
+export const customerSlice = createSlice({
+  name: "customerFood",
+  initialState,
+  reducers:{
+    addCustomer: (state, action: PayloadAction<Customer>) => {
+      state.value.push(action.payload);
+    },
+    addFoodToCustomer: (state, action: PayloadAction<addFoodToCustomerPayload>) => {
+      state.value.forEach((customer => {
+        if(customer.id === action.payload.id)
+          customer.food.push(action.payload.food)
+        }
+      ))
+    }
+  },
+});
+
+export const { addCustomer, addFoodToCustomer } = customerSlice.actions;
+export default customerSlice.reducer;
